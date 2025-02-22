@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { WalletsService } from './wallets.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
+import { WalletPresenter } from './wallet.presenter';
 
 @Controller('wallets')
 export class WalletsController {
@@ -17,8 +18,9 @@ export class WalletsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.walletsService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const wallet = await this.walletsService.findOne(id);
+    return new WalletPresenter(wallet!);
   }
 
   @Post(':id/assets')
